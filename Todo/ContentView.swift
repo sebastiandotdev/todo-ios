@@ -1,23 +1,44 @@
-//
-//  ContentView.swift
-//  Todo
-//
-//  Created by Johan Sebastian on 17/07/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+    @State private var notes: [String] = []
+    @State private var note: String = ""
+    
+    private func addNote() {
+        guard note.isEmpty else {
+            return
         }
-        .padding()
+        
+        notes.append(note)
+        note.removeAll()
     }
+    
+    var body: some View {
+        
+        VStack {
+            HStack {
+                
+                TextField("Add a note", text: $note)
+                    .padding(10)
+                    .border(.secondary)
+                
+                Button("", systemImage: "plus", action: addNote)
+            }
+            .padding(.horizontal, 15)
+        }
+        
+        List {
+            ForEach(notes, id: \.self) { note in
+                Text(note)
+            }
+        }
+        .padding(.vertical, 16)
+        Spacer()
+    }
+    
+    
 }
+
 
 #Preview {
     ContentView()
