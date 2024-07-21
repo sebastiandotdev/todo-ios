@@ -5,12 +5,16 @@ struct ContentView: View {
     @State private var note: String = ""
     
     private func addNote() {
-        guard note.isEmpty else {
+        guard !note.isEmpty else {
             return
         }
         
         notes.append(note)
         note.removeAll()
+    }
+    
+    private func deleteNote() {
+        
     }
     
     var body: some View {
@@ -29,7 +33,12 @@ struct ContentView: View {
         
         List {
             ForEach(notes, id: \.self) { note in
-                Text(note)
+                HStack {
+                    Text(note)
+                    Spacer()
+                    Button("", systemImage: "trash", action: deleteNote)
+                        .foregroundStyle(.red)
+                }
             }
         }
         .padding(.vertical, 16)
