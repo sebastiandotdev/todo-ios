@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var notes: [String] = []
+    @State private var notes: [Task] = []
     @State private var note: String = ""
     
     private func addNote() {
@@ -9,35 +9,44 @@ struct ContentView: View {
             return
         }
         
-        notes.append(note)
+        
+        notes.append(Task(title: note))
         note.removeAll()
     }
     
-    private func deleteNote() {
-        
+    private func deleteNote(id: UUID) {
+        print(id)
     }
     
     var body: some View {
         
         VStack {
+            Text("Welcome to Todo IOS")
+                .font(.largeTitle.bold())
+            
             HStack {
-                
                 TextField("Add a note", text: $note)
                     .padding(10)
                     .border(.secondary)
+                    .presentationCornerRadius(20)
                 
-                Button("", systemImage: "plus", action: addNote)
+                Button("Agregar", action: addNote)
+                    .buttonStyle(.borderedProminent)
+                    .presentationCornerRadius(20)
+                    
             }
             .padding(.horizontal, 15)
         }
         
         List {
-            ForEach(notes, id: \.self) { note in
+            ForEach(notes, id: \.self.id) { note in
                 HStack {
-                    Text(note)
+                    Text(note.title)
                     Spacer()
-                    Button("", systemImage: "trash", action: deleteNote)
-                        .foregroundStyle(.red)
+                    Button("", systemImage: "trash", action: {
+                        deleteNote(id: note.id)
+                    })
+                    .foregroundStyle(.red)
                 }
             }
         }
