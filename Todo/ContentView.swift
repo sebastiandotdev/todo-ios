@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var notes: [Task] = []
     @State private var note: String = ""
+    @State private var isCompleted = false
     
     private func addNote() {
         guard !note.isEmpty else {
@@ -15,7 +16,10 @@ struct ContentView: View {
     }
     
     private func deleteNote(id: UUID) {
-        print(id)
+        let filteredNotes = notes.filter { note in
+            return note.id != id
+        }
+        notes = filteredNotes
     }
     
     var body: some View {
@@ -33,7 +37,7 @@ struct ContentView: View {
                 Button("Agregar", action: addNote)
                     .buttonStyle(.borderedProminent)
                     .presentationCornerRadius(20)
-                    
+                
             }
             .padding(.horizontal, 15)
         }
@@ -42,7 +46,10 @@ struct ContentView: View {
             ForEach(notes, id: \.self.id) { note in
                 HStack {
                     Text(note.title)
-                    Spacer()
+                    Toggle(isOn: $isCompleted) {
+                        Text("")
+                    }
+                    .toggleStyle(.switch)
                     Button("", systemImage: "trash", action: {
                         deleteNote(id: note.id)
                     })
